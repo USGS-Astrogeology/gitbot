@@ -1,0 +1,1 @@
+This is a clone of https://github.com/Mariatta/black_out that is updated only to be deployed via docker. This dir. contains a Dockerfile to create the black_out image as a celery worker.
