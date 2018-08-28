@@ -19,13 +19,22 @@ cache = cachetools.LRUCache(maxsize=500)
 
 async def main(request):
     try:
+        secret = str()
+        oauth_token = str()
+
+        if os.path.exists("run/secret/gh_secret"):
+            with open("/run/secret/gh_secret") as f:
+                secret = f.read().strip()
+
+        if os.path.exists("run/secret/gh_auth"):
+            with open("/run/secret/gh_auth") as f:
+                oauth_token = f.read().strip()
+
         body = await request.read()
-        secret = os.environ.get("GH_SECRET")
         event = sansio.Event.from_http(request.headers, body, secret=secret)
         print("GH delivery ID", event.delivery_id, file=sys.stderr)
         if event.event == "ping":
             return web.Response(status=200)
-        oauth_token = os.environ.get("GH_AUTH")
         async with aiohttp.ClientSession() as session:
             gh = gh_aiohttp.GitHubAPI(
                 session,

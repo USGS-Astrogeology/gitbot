@@ -1,7 +1,7 @@
-version: "3"
+version: "3.3"
 services:
   blackout:
-    image: jlaura/blackout
+    image: usgsastro/gitbot
     environment:
       - PORT=80
       - GH_REPO_NAME=autocnet
@@ -9,13 +9,25 @@ services:
       - GH_USERNAME=ascbot
       - GH_EMAIL=usgs.asc.bot@gmail.com
       - GH_FULLNAME=ascbot
-      - GH_AUTH=
-      - GH_SECRET=
+    secrets:
+      - gh_auth
+      - gh_secret
     ports:
       - "37000:80"
     command: celery worker -l info -A black_out.tasks.app
   redis:
     image: redis:4.0.8-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
-    volumes:
-      - .redis.conf:/usr/local/etc/redis/redis.conf
+    configs:
+      - source: redis_conf
+        target: /usr/local/etc/redis/redis.conf
+
+configs:
+  redis_conf:
+    file: ./redis.conf
+
+secrets:
+  gh_auth:
+    external: true
+  gh_secret:
+    external: true
