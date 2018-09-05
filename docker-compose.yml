@@ -13,7 +13,7 @@ services:
       - gh_auth
       - gh_secret
     ports:
-      - "37000:80"
+      - "8080:80"
     command: celery worker -l info -A black_out.tasks.app
   redis:
     image: redis:4.0.8-alpine
