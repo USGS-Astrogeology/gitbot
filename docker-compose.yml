@@ -16,7 +16,7 @@ services:
       - "8080:80"
     command: celery worker -l info -A black_out.tasks.app
   redis:
-    image: redis:4.0.8-alpine
+    image: redis:4-alpine
     command: redis-server /usr/local/etc/redis/redis.conf
     configs:
       - source: redis_conf
